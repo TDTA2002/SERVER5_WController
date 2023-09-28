@@ -1,0 +1,67 @@
+{
+    "categoryId": "6b033016-d033-44bc-9c5e-a06c6d54013d",
+    "name": "dw1d1w1d1",
+    "des": "123wdewd1 1we1we",
+    "avatar": null,
+    "product_options": [
+        {
+            "price": 3221,
+            "product_option_pictures": [
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/d6aedb44-cc09-4797-b871-e09923193cfd"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/b299186d-d609-48a1-b0fa-05317e10bf67"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/2d83608c-7b18-4c2d-b9e8-cc73946cdad1"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/3ae57f44-a0ed-4ad6-94d3-36106ffa2afc"
+                }
+            ]
+        },
+        {
+            "price": 112,
+            "product_option_pictures": [
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/b01e3195-87c7-4231-b5d8-d0f2db707935"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/012884f5-6dc2-4d04-904e-380f4f01fc50"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/32d2486d-e47c-4bd3-9737-adc0c65ea70f"
+                }
+            ]
+        },
+        {
+            "price": 233,
+            "product_option_pictures": [
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/506154ed-48c4-431b-9d74-41d18e7b8167"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/8140349f-a2d9-4ecd-aa13-4176ee8f2472"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/7358cf31-e372-4f25-9389-8319b86928b0"
+                },
+                {
+                    "file": {},
+                    "url": "blob:http://localhost:5173/8dcf8467-6d6b-4c53-bf37-11497daa4564"
+                }
+            ]
+        }
+    ]
+}
