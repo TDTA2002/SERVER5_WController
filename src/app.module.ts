@@ -9,8 +9,6 @@ import { UserModule } from './Module/user/user.module';
 import { AuthenModule } from './Module/authen/authen.module';
 import { UserAddressesModule } from './Module/user-addresses/user-addresses.module';
 import { UploadModule } from './Module/upload/upload.module';
-import { DiscordModule } from './Module/discord/discord.module';
-import { GatewayModule } from './Module/gateway/gateway.module';
 import { ProductOptionsModule } from './Module/productOptions/productOption.module';
 import { OptionPicturesModule } from './Module/productOption-picture/productOption-picture.module';
 
@@ -34,8 +32,6 @@ import { OptionPicturesModule } from './Module/productOption-picture/productOpti
     AuthenModule,
     UserAddressesModule,
     UploadModule,
-    GatewayModule,
-    DiscordModule,
     ProductOptionsModule,
     OptionPicturesModule
   ],

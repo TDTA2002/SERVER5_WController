@@ -70,29 +70,29 @@ export class ProductsService {
 
   async findOne(id: string) {
     try {
-      let data = await this.product.findOne({
+      let product = await this.product.findOne({
         where: {
           id: id
+        },
+        order: {
+
         },
         relations: {
           options: {
             pictures: true
           }
         }
-      });
-
+      })
       return {
-        data: data,
-        message: "Get ok!",
-        status: true
-      };
-
+        status: true,
+        message: "get product successfully",
+        data: product
+      }
     } catch (err) {
       return {
-        data: null,
-        message: "Lỗi model",
-        status: false
-      };
+        status: false,
+        data: null
+      }
     }
   }
 

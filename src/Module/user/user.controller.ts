@@ -14,6 +14,7 @@ import common from 'src/utils/common';
 
 
 @Controller('user')
+
 export class UserController {
   constructor(private readonly usersService: UserService, private readonly mail: MailService, private readonly jwt: JwtService) { }
 
@@ -272,6 +273,7 @@ export class UserController {
     }
   }
 
+  
   @Post()
   async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {

@@ -3,7 +3,8 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGenerated
 import * as  bcrypt from 'bcrypt'
 import { UserRole, UserStatus } from "../user.enum";
 import { UserAddresses } from "src/Module/user-addresses/entities/user-address.entity";
-import { CustomerChat } from "src/Module/gateway/entities/customer.chat.entity";
+import { CustomerChats } from "src/Module/socket/customers/entities/customer.chat.entity";
+// import { Receipt } from "src/Module/receipts/entities/receipt.entity";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -59,7 +60,12 @@ export class User {
     @OneToMany(() => UserAddresses, (userAddresses) => userAddresses.user)
     userAddresses: UserAddresses[];
 
+    @OneToMany(() => CustomerChats, (customerChats) => customerChats.user)
+    customerChats: CustomerChats[];
 
-    @OneToMany(() => CustomerChat, (customerChat) => customerChat.user)
-    customerChat: CustomerChat[];
+    @OneToMany(() => CustomerChats, (customerChats) => customerChats.admin)
+    adminChats: CustomerChats[];
+
+    // @OneToMany(() => Receipt, (receipts) => receipts.user)
+    // receipts: Receipt[];
 }

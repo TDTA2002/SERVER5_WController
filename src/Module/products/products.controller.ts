@@ -50,6 +50,7 @@ export class ProductsController {
       })
     }
   }
+  
   @Version('2')
   @Get()
   async findAll(@Res() res: Response, @Query("skip") skip: number, @Query("take") take: number) {
