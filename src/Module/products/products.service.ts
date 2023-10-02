@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import { PaginationDto } from './dto/pagination.dto';
 
@@ -113,7 +113,27 @@ export class ProductsService {
       return [false, "lỗi model", null]
     }
   }
-
+  async searchByName(name: string) {
+    try {
+      let categories = await this.product.find({
+        where: {
+          name: ILike(`%${name}%`),
+        },
+        relations: {
+          options: {
+            pictures: true
+          }
+        }
+      }
+      );
+      return {
+        data: categories,
+        message: "Get products successfully"
+      }
+    } catch (err) {
+      throw new HttpException('Loi Model', HttpStatus.BAD_REQUEST);
+    }
+  }
   async findByCategory(categoryId: string) {
     try {
       console.log("categoryId");

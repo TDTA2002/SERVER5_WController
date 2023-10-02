@@ -7,23 +7,23 @@ export class DiscordBotSocket implements OnModuleInit {
     /* thuộc tính client được ép kiểu theo class Client của discord */
     client: Client;
     /* Token dùng để connect tới bot */
-    botToken:string = "";
+    botToken: string = "MTE1Mzk4ODkyNDQ4NjcyOTc2OA.GWWucR.PoOugln_8bzk4bjlMqok4Bl5WBXvMVpkvj9XFo";
     /* ID của kênh discord muốn làm việc */
-    guildId:string = "1153901509965267027"
+    guildId: string = "699218721603977246"
     /* Khai báo ra thuộc tính guild được ép kiểu theo Class Guild của discord*/
     guild: Guild
 
     constructor(
         @Inject(forwardRef(() => CustomerChatSocket))
         private readonly customerChatSocket: CustomerChatSocket
-    ){}
+    ) { }
 
     onModuleInit(): void {
         /* Khởi tạo instance client discord */
-        this.client = new Client({ 
+        this.client = new Client({
             intents: [
-                GatewayIntentBits.Guilds, 
-                GatewayIntentBits.GuildMessages, 
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.MessageContent,
             ],
         })
@@ -37,16 +37,16 @@ export class DiscordBotSocket implements OnModuleInit {
             this.connectGuild();
 
             this.client.on("messageCreate", (message: Message) => {
-               //console.log("message", message.content)
-              if(!message.author.bot) {
-                //message.reply("Ok thấy rồi!")
-                this.customerChatSocket.sendMessageToClient(message.channelId, message.content)
-              }
+                console.log("message", message.content)
+                if (!message.author.bot) {
+                    //message.reply("Ok thấy rồi!")
+                    this.customerChatSocket.sendMessageToClient(message.channelId, message.content)
+                }
             })
         })
     }
 
-    connectGuild():void {
+    connectGuild(): void {
         /* Lấy instance của kênh discord mình muốn làm việc theo ID Kênh và gán nó cho thuộc tính guild  */
         this.guild = this.client.guilds.cache.get(this.guildId);
     }

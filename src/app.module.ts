@@ -11,6 +11,7 @@ import { UserAddressesModule } from './Module/user-addresses/user-addresses.modu
 import { UploadModule } from './Module/upload/upload.module';
 import { ProductOptionsModule } from './Module/productOptions/productOption.module';
 import { OptionPicturesModule } from './Module/productOption-picture/productOption-picture.module';
+import { SocketModule } from './Module/socket/socket.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { OptionPicturesModule } from './Module/productOption-picture/productOpti
     UserAddressesModule,
     UploadModule,
     ProductOptionsModule,
-    OptionPicturesModule
+    OptionPicturesModule,
+    SocketModule
   ],
   controllers: [AppController],
   providers: [AppService],

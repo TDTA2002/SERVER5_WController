@@ -1,23 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Req, HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response, Request } from 'express';
 import { MailService, templates } from '../mail/mail.service';
-import { JwtService } from 'src/utils/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import * as  bcrypt from 'bcrypt'
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { LoginDto } from './dto/login.dto';
 import common from 'src/utils/common';
-
+import { JwtService } from '../jwt/jwt.service';
+import { GoogleLoginDto } from './dto/googleLogion.dto';
+import axios from 'axios';
+import jwt from 'src/utils/jwt';
 
 
 @Controller('user')
 
 export class UserController {
   constructor(private readonly usersService: UserService, private readonly mail: MailService, private readonly jwt: JwtService) { }
-
 
   @Post('change-password')
   async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Req() req: Request, @Res() res: Response) {
@@ -266,6 +267,7 @@ export class UserController {
       return res.status(200).json({
         token: this.jwt.createToken(serRes.data, '1d')
       });
+      // return res.status(serRes.status ? HttpStatus.OK : HttpStatus.BAD_REQUEST).json(serRes);
     } catch (err) {
       return res.status(500).json({
         message: "Server Controller Error!"
@@ -273,13 +275,63 @@ export class UserController {
     }
   }
 
-  
+  @Post('google-login')
+  async googleLogin(@Body() googleLoginDto: GoogleLoginDto, @Req() req: Request, @Res() res: Response) {
+    try {
+      await axios.post("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD-uPQlOI3t-iF6wGyHYr4ML1KNRmEryB0", {
+        idToken: googleLoginDto.accessToken
+      })
+      let userExist = await this.usersService.findByUserName(googleLoginDto.email);
+      if (userExist.status) {
+        // đã có tài khoản liên kết gmail này
+        let token = jwt.createToken(userExist.data, "1d");
+        return res.status(200).json({
+          token
+        })
+      } else {
+        /* Đăng ký */
+        let newUserRes = await this.usersService.register({
+          email: googleLoginDto.email,
+          userName: googleLoginDto.userName,
+          password: googleLoginDto.password,
+          firstName: googleLoginDto.email,
+          lastName: ''
+        })
+
+        if (newUserRes.status) {
+          let token = jwt.createToken(newUserRes.data, "1d");
+          return res.status(200).json({
+            token
+          })
+        }
+
+        return res.status(213).json({
+          message: "Đăng nhập với google thất bại!"
+        })
+      }
+    } catch {
+      return res.status(500).json({
+        message: "Lỗi controller"
+      })
+    }
+  }
+  // @Post('login')
+  // async login(@Body() loginUserDto: LoginDto, @Req() req: Request, @Res() res: Response) {
+  //   try {
+  //     let serviceRes = await this.usersService.login(loginUserDto);
+  //     // serviceRes.message = (Text(String(req.headers.language)) as any)[serviceRes.message];
+  //     return res.status(serviceRes.status ? HttpStatus.OK : HttpStatus.BAD_REQUEST).json(serviceRes);
+  //   } catch {
+  //     throw new HttpException('ControllerErr', HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
   @Post()
   async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
       let serRes = await this.usersService.register(createUserDto);
-      
-      if (serRes.status) {  
+
+      if (serRes.status) {
         /* Mail */
         this.mail.sendMail({
           subject: "Register Authentication Email",
@@ -287,8 +339,8 @@ export class UserController {
           html: templates.emailConfirm({
             confirmLink: `${process.env.HOST}:${process.env.PORT}/api/v1/user/email-authentication/${serRes.data.id}/${this.jwt.createToken(serRes.data, "300000")}`,
             language: "vi",
-            productName: "Miêu Shop",
-            productWebUrl: "mieushop.com",
+            productName: "PS5",
+            productWebUrl: "PS5.com",
             receiverName: `${serRes.data.firstName} ${serRes.data.lastName}`
           })
         })
@@ -302,6 +354,5 @@ export class UserController {
       });
     }
   }
-
 
 }

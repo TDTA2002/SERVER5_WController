@@ -50,7 +50,16 @@ export class ProductsController {
       })
     }
   }
-  
+  @Get('search')
+  async search(@Res() res: Response, @Query('q') q: string) {
+    try {
+      if (q != undefined) {
+        return res.status(HttpStatus.OK).json(await this.productsService.searchByName(q))
+      }
+    } catch (err) {
+      throw new HttpException('Loi Controller', HttpStatus.BAD_REQUEST);
+    }
+  }
   @Version('2')
   @Get()
   async findAll(@Res() res: Response, @Query("skip") skip: number, @Query("take") take: number) {

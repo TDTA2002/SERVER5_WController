@@ -7,7 +7,7 @@ import { Response } from 'express';
 import * as  bcrypt from 'bcrypt'
 import { AuthenticationDto } from './dto/authentication.dto';
 import { UserService } from '../user/user.service';
-import { JwtService } from 'src/utils/jwt';
+import { JwtService } from '../jwt/jwt.service';
 // import jwt from 'src/utils/jwt';
 
 

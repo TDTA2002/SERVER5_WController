@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
-export default {
-    createToken: function (data: any, time: string) {
+@Injectable()
+export class JwtService {
+    createToken(data: any, time: string) {
         try {
             return jwt.sign(
                 {
@@ -10,17 +12,15 @@ export default {
                 , String(process.env.JWT_KEY)
                 , { expiresIn: `${time}` });
         } catch (err) {
-            console.log("err", err)
             return false
         }
-    },
+    }
 
-    verifyToken: function (token: string) {
+    verifyToken(token: string) {
         let result;
         try {
             jwt.verify(token, String(process.env.JWT_KEY), function (err, decoded) {
                 if (err) {
-                    console.log("err", err)
                     result = false
                 } else {
                     result = decoded
@@ -31,5 +31,4 @@ export default {
             return false
         }
     }
-    
 }

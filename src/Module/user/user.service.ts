@@ -1,18 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { FindByIdSerRes, RegisterSerRes, UpdateSerRes } from './user.interface';
+import { FindByIdSerRes, UpdateSerRes } from './user.interface';
 import validation from 'src/utils/validation';
+import { LoginDto } from './dto/login.dto';
+import * as bcrypt from 'bcrypt';
+import jwt from '../../utils/jwt';
+import { JwtService } from '../jwt/jwt.service';
 
 @Injectable()
 export class UserService {
 
-  constructor(@InjectRepository(User) private users: Repository<User>) { }
+  constructor(@InjectRepository(User) private users: Repository<User>, private jwtService: JwtService) { }
 
-  async register(CreateUserDto: CreateUserDto): Promise<RegisterSerRes> {
+  async register(CreateUserDto: CreateUserDto) {
     try {
       let newUser = this.users.create(CreateUserDto);
       let result = await this.users.save(newUser);
@@ -104,5 +108,56 @@ export class UserService {
       return { status: false, data: null, message: "lỗi" }
     }
   }
+  async login(loginUserDto: LoginDto) {
+    try {
+      const user = await this.users.findOne({
+        where: { userName: loginUserDto.userNameOrEmail }
+      })
+      if (!user) {
+        throw new HttpException("userName is not exist", HttpStatus.UNAUTHORIZED);
+      }
+      const checkPassword = bcrypt.compareSync(loginUserDto.password, user.password);
+      if (!checkPassword) {
+        throw new HttpException("Password is not correct", HttpStatus.UNAUTHORIZED);
+      }
+      return {
+        status: true,
+        message: "SignInSuccess",
+        data: user,
+        token: jwt.createToken(user, "1d"),
+      }
+    } catch (err) {
+      return {
+        status: false,
+        message: err.response,
+        data: null
+      }
+    }
 
+  }
+  async findByUserName(userName: string): Promise<FindByIdSerRes> {
+    try {
+      let result = await this.users.findOne({
+        where: {
+          userName
+        }
+      });
+
+      if (!result) {
+        throw new Error
+      }
+
+      return {
+        status: true,
+        data: result,
+        message: "Find user ok!"
+      }
+    } catch (err) {
+      return {
+        status: false,
+        data: null,
+        message: "Lỗi model"
+      }
+    }
+  }
 }

@@ -4,7 +4,7 @@ import * as  bcrypt from 'bcrypt'
 import { UserRole, UserStatus } from "../user.enum";
 import { UserAddresses } from "src/Module/user-addresses/entities/user-address.entity";
 import { CustomerChats } from "src/Module/socket/customers/entities/customer.chat.entity";
-// import { Receipt } from "src/Module/receipts/entities/receipt.entity";
+import { Receipt } from "src/Module/receipts/entities/receipt.entity";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -19,13 +19,13 @@ export class User {
     @Column({ default: false })
     emailAuthentication: boolean;
 
-    @Column({ length: 20 })
-    firstName: string;
+    @Column({ length: 30 })
+    firstName?: string;
 
-    @Column({ length: 20 })
-    lastName: string;
+    @Column({ length: 30 })
+    lastName?: string;
 
-    @Column({ unique: true, length: 20 })
+    @Column({ unique: true, length: 30 })
     userName: string;
 
     @Column()
@@ -66,6 +66,6 @@ export class User {
     @OneToMany(() => CustomerChats, (customerChats) => customerChats.admin)
     adminChats: CustomerChats[];
 
-    // @OneToMany(() => Receipt, (receipts) => receipts.user)
-    // receipts: Receipt[];
+    @OneToMany(() => Receipt, (receipt) => receipt.user)
+    receipts: Receipt[];
 }
