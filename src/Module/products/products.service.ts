@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { ILike, Repository } from 'typeorm';
+import { Equal, ILike, Repository } from 'typeorm';
 
 import { PaginationDto } from './dto/pagination.dto';
 
@@ -24,7 +24,7 @@ export class ProductsService {
       }
       let newProductDetail = await this.product.findOne({
         where: {
-          id: newProduct.id
+          id: newProduct.id,
         },
         relations: {
           options: {
@@ -72,7 +72,10 @@ export class ProductsService {
     try {
       let product = await this.product.findOne({
         where: {
-          id: id
+          id: id,
+          options: {
+            status: Equal(true) 
+          }
         },
         order: {
 

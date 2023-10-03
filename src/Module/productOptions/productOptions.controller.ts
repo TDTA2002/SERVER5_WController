@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/
 import { Response } from 'express';
 import { CreateProductOptionDto } from './dto/productOptions.dto';
 import { ProductOptionsService } from './productOptions.service';
+import { UpdateProductOptionDto } from './dto/update-product_option.dto';
 
 @Controller('product-options')
 export class ProductOptionsController {
@@ -21,4 +22,11 @@ export class ProductOptionsController {
             })
         }
     }
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateProductOptionDto: UpdateProductOptionDto) {
+        console.log("|updateProductOptionDto" , updateProductOptionDto);
+        
+        return this.productOptionsService.update(id, updateProductOptionDto);
+    }
+
 }

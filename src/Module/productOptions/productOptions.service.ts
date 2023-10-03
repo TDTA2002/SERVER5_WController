@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductOptionDto } from './dto/productOptions.dto';
 import { ProductOption } from './entities/productOptions.entity';
+import { UpdateProductOptionDto } from './dto/update-product_option.dto';
 
 @Injectable()
 export class ProductOptionsService {
@@ -27,5 +28,24 @@ export class ProductOptionsService {
         } catch (err) {
             return [false, "Lỗi model", null]
         }
+    }
+
+    async update(id: string, updateProductOptionDto: UpdateProductOptionDto) {
+        let data = await this.options.findOne({
+            where: {
+                id
+            }
+        })
+        console.log("updateProductOptionDto", updateProductOptionDto);
+        console.log("data", data);
+
+        if (!data) return false
+        let newData = this.options.merge(data, updateProductOptionDto)
+        let result = this.options.save(newData)
+        return {
+            status: true,
+            message: "Update Product Option Successfully!",
+            data: result
+        };
     }
 }
